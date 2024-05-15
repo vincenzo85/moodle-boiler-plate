@@ -31,14 +31,26 @@ class block_testblock extends block_base {
   
     function get_content() {
     
+        global $DB;
 
         if ($this->content !== NULL) {
             return $this->content;
         }
+        $users = $DB -> get_records('user');
+        $substring = '';
+        $i = 0;
+        foreach ($users as $user){
+            if ($i < 5) {
+                $i++;
+            $substring  .= $user -> firstname. ' ' . $user->lastname. '<br>';
+            }else{
+                break; // Esce dal foreach
+            }
+
+        }
 
         $this -> content = new stdClass;
-        $this -> content ->text = 'this is the text';
-        $this -> content -> footer = 'this is the footer';
+        $this -> content -> footer = $substring;
         
     }
 
