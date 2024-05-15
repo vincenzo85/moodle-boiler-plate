@@ -27,7 +27,11 @@ class block_testblock extends block_base {
     function init() {
         $this->title = get_string('pluginname', 'block_html');
     }
-
+    
+    function has_config()
+    {
+        return true;
+    }
   
     function get_content() {
     
@@ -36,17 +40,25 @@ class block_testblock extends block_base {
         if ($this->content !== NULL) {
             return $this->content;
         }
-        $users = $DB -> get_records('user');
-        $substring = '';
-        $i = 0;
-        foreach ($users as $user){
-            if ($i < 5) {
-                $i++;
-            $substring  .= $user -> firstname. ' ' . $user->lastname. '<br>';
-            }else{
-                break; // Esce dal foreach
-            }
 
+        $showcourses = get_config('block_testblock', 'showcourses');
+        
+
+        if ($showcourses){
+            $substring = 'courses';
+        }else{
+            $users = $DB -> get_records('user');
+            $substring = 'A: '.$showcourses;
+            $i = 0;
+            foreach ($users as $user){
+                if ($i < 5) {
+                    $i++;
+                $substring  .= $user -> firstname. ' ' . $user->lastname. '<br>';
+                }else{
+                    break; // Esce dal foreach
+                }
+    
+            }
         }
 
         $this -> content = new stdClass;
